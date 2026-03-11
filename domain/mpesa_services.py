@@ -34,15 +34,10 @@ class MpesaService:
             "Authorization": f"Basic {encoded_credentials}"
         }
 
-        params = {
-            "grant_type": "client_credentials"
-        }
-        
         async with httpx.AsyncClient() as client:
-            response = await client.post(
+            response = await client.get(
                 Config.MPESA_LIVE_OAUTH_URL,
-                headers=headers,
-                params=params
+                headers=headers
             )
             data = response.json()
             print(response)
@@ -107,7 +102,10 @@ class MpesaService:
                     json=payload,
                     headers=headers
                 )
+                
                 resp_data = response.json()
+
+                print(resp_data)
                 
                 # 5. Update DB with CheckoutRequestID
                 checkout_id = resp_data.get("CheckoutRequestID")
